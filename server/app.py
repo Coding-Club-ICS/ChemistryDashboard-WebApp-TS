@@ -1,29 +1,33 @@
-from flask import Flask, jsonify, request
-import psycopg2
-from psycopg2 import sql
 import os
+import psycopg2
+import psycopg2.pool
+from flask_wtf import FlaskForm
+from wtforms import StringField
+from wtforms.validators import DataRequired
+from flask import Flask, jsonify, request, json
+from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'secret-key'
 
-DB_HOST = os.environ["DB_HOST"]
-DB_NAME = os.environ["DB_NAME"]
-DB_USER = os.environ["DB_USER"]
-DB_PASSWORD = os.environ["DB_PASSWORD"]
-DB_PORT = os.environ["DB_PORT"]
+db_connection_pool = psycopg2.pool.SimpleConnectionPool(
+    minconn=1,
+    maxconn=5,
+    host=os.environ["DB_HOST"],
+    database=os.environ["DB_NAME"],
+    user=os.environ["DB_USER"],
+    password=os.environ["DB_PASSWORD"],
+    port=os.environ["DB_PORT"]
+)
+
 
 def create_db_connection():
     try:
-        connection = psycopg2.connect(
-            host=DB_HOST,
-            database=DB_NAME,
-            user=DB_USER,
-            password=DB_PASSWORD,
-            port=DB_PORT
-        )
-        return connection
+        return db_connection_pool.getconn()
     except psycopg2.Error as e:
-        print("Error: Could not make connection to the Postgres database")
+        app.logger.error("Error: Could not connect to database")
         return None
+
 
 def create_tables():
     connection = create_db_connection()
@@ -43,8 +47,11 @@ def create_tables():
         print(e)
     finally:
         if connection:
-            connection.close()
+            db_connection_pool.putconn(connection)
 
+
+class ElementForm(FlaskForm):
+    name = StringField("Name", validators=[DataRequired()])
 
 @app.route("/")
 def index():
@@ -68,10 +75,11 @@ ORDER BY id ASC
         data = cursor.fetchall()
         return jsonify(data)
     except Exception as e:
+        app.logger.error(f"Could not execute query: {e}")
         return jsonify({"error": f"Could not execute query: {e}"})
     finally:
         if connection:
-            connection.close()
+            db_connection_pool.putconn(connection)
 
 
 @app.post("/chem/add_element")
@@ -83,11 +91,11 @@ def insert_element():
     try:
         cursor = connection.cursor()
 
+        form = ElementForm()
+
         data = request.json
         name = data.get("name")
 
-        if name is None:
-            return jsonify({"error": "Name is required"}), 400
 
         insert_query = "INSERT INTO elements.elements (name) VALUES (%s)"
         cursor.execute(insert_query, (name,))
@@ -96,10 +104,12 @@ def insert_element():
 
         return jsonify({"message": "Element added successfully"})
     except Exception as e:
+        app.logger.error(f"Could not execute query: {e}")
         return jsonify({"error": f"Could not execute query: {e}"})
     finally:
         if connection:
-            connection.close()
+            db_connection_pool.putconn(connection)
+
 
 @app.put("/chem/update_element/<int:id>")
 def update_element(id):
@@ -145,10 +155,23 @@ def delete_element(id):
 
         return jsonify({"message": "Element deleted successfully"})
     except Exception as e:
-        return jsonify({"error": f"Could not execute query: {e}"})
+        app.logger.error(f"Could not execute query: {e}")
+        return jsonify({"error": f"Could not execute query: {e}"}), 500
     finally:
         if connection:
-            connection.close()
+            db_connection_pool.putconn(connection)
+
+
+@app.errorhandler(HTTPException)
+def handle_exception(e):
+    response = e.get_response()
+    response.data = json.dumps({
+        "code": e.code,
+        "name": e.name,
+        "description": e.description,
+    })
+    response.content_type = "application/json"
+    return response
 
 
 if __name__ == "__main__":
