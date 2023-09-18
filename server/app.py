@@ -1,6 +1,7 @@
 import os
 import psycopg2
 import psycopg2.pool
+from chempy import balance_stoichiometry
 from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.validators import DataRequired
@@ -161,6 +162,37 @@ def delete_element(id):
         if connection:
             db_connection_pool.putconn(connection)
 
+@app.get("/chem/balance/<string:equation>")
+def balance_equation(equation):
+    try:
+        equation = equation.split("=")
+        equation = equation.replace(" ", "")
+        reactants = set(equation[0].split("+"))
+        products = set(equation[1].split("+"))
+        reac, prod = balance_stoichiometry(reactants, products)
+        reac = dict(reac)
+        prod = dict(prod)
+        result = ""
+        reac_key = list(reac.keys())
+        prod_key = list(prod.keys())
+
+        for key in reac_key:
+            if reac[key] == 1:
+                reac[key] = ""
+            result += str(reac[key]) + key
+            if key != reac_key[-1]:
+                result += " + "
+
+        for key in prod_key:
+            if prod[key] == 1:
+                prod[key] = ""
+            result += " = " + str(prod[key]) + key
+            if key != prod_key[-1]:
+                result += " + "
+
+        return jsonify({"result": result})
+    except Exception as e:
+        print(e)
 
 @app.errorhandler(HTTPException)
 def handle_exception(e):
