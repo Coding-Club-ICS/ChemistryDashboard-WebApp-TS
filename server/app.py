@@ -1,11 +1,17 @@
 import os
 import periodictable
+import sentry_sdk
 from chempy import balance_stoichiometry
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, jsonify, request, json
+from sentry_sdk.integrations.flask import FlaskIntegration
 from werkzeug.exceptions import HTTPException
-from sqlalchemy.schema import CreateSchema
 
+sentry_sdk.init(
+    dsn=os.environ.get("SENTRY_DSN"),
+    integrations=[FlaskIntegration()],
+    traces_sample_rate=1.0
+)
 
 app = Flask(__name__)
 app.config.from_pyfile("config.py")
