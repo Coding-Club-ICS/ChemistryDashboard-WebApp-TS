@@ -1,0 +1,7 @@
+chempy==0.8.3
+Flask==2.3.2
+flask_sqlalchemy==3.1.1
+periodictable==1.6.1
+Werkzeug==2.3.6
+psycopg2-binary==2.9.7
+sentry-sdk[flask]==1.31.0
