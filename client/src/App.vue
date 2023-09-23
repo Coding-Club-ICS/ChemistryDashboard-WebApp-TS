@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Sidebar from './components/Sidebar.vue';
 </script>
 
 <template>
@@ -6,6 +7,8 @@
   <router-link to="/calculator" />
   <router-link to="/viewer" />
 
-  
-  <router-view />
+  <div class="h-full">
+    <router-view />
+    <Sidebar />
+  </div>
 </template>
