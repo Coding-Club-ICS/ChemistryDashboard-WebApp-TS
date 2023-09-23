@@ -1,19 +1,19 @@
 import os
 import periodictable
-import sentry_sdk
+import openai
 from chempy import balance_stoichiometry
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, jsonify, request, json
-from sentry_sdk.integrations.flask import FlaskIntegration
 from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
+openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 DB_USER = os.environ.get("DB_USER")
 DB_PASSWORD = os.environ.get("DB_PASSWORD")
 DB_NAME = os.environ.get("DB_NAME")
-DB_HOST = 'localhost'
+DB_HOST = 'postgres'
 DB_PORT = '5432'
 
 DB_URI = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
@@ -55,6 +55,8 @@ def get_elements():
 def add_element():
     try:
         name = request.json.get("name")
+        if name not in valid_elements:
+            return jsonify({"error": "Invalid element"}), 400
         element = Element(name=name)
         db.session.add(element)
         db.session.commit()
@@ -72,6 +74,8 @@ def update_element(id):
         element = Element.query.get(id)
         if element:
             element.name = name
+            if name not in valid_elements:
+                return jsonify({"error": "Invalid element"}), 400
             db.session.commit()
             return jsonify({"message": "Element updated successfully"})
         else:
