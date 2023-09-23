@@ -1,5 +1,8 @@
 import os
+import requests
 import periodictable
+import pubchempy as pcp
+from mendeleev import element
 from chempy import balance_stoichiometry
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, jsonify, request, json
@@ -135,6 +138,27 @@ def get_periodic_table():
         return jsonify({"elements": elements})
     except Exception as e:
         return jsonify({"error": f"Could not execute query: {e}"}), 500
+
+@app.route("/chem/element/<string:symbol>", methods=["GET"])
+def get_properties(symbol):
+    try:
+        e = element(symbol)
+        return jsonify({"name": e.name, "atomic_number": e.atomic_number, "atomic_weight": e.atomic_weight, "atomic_radius":e.atomic_radius})
+    except Exception as e:
+        return jsonify({"error": f"Could not execute query: {e}"}), 500
+
+
+@app.route("/chem/compound/get_cid/<string:compound>", methods=["GET"])
+def get_cid(compound):
+    try:
+        cid = requests.get(f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/{compound}/cids/JSON").json()["IdentifierList"]["CID"][0]
+        return jsonify({"cid": cid})
+    except Exception as e:
+        return jsonify({"error": f"Could not execute query: {e}"}), 500
+
+    except Exception as e:
+        return jsonify({"error": f"Could not execute query: {e}"}), 500
+    
 
 
 @app.errorhandler(HTTPException)

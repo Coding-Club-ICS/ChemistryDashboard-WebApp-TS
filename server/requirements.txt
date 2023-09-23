@@ -5,3 +5,5 @@ periodictable==1.6.1
 Werkzeug==2.3.6
 psycopg2-binary==2.9.7
 openai==0.28.0
+mendeleev==0.14.0
+pubchempy==1.0.4
