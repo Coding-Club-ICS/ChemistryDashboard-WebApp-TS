@@ -7,20 +7,13 @@ from flask import Flask, jsonify, request, json
 from sentry_sdk.integrations.flask import FlaskIntegration
 from werkzeug.exceptions import HTTPException
 
-sentry_sdk.init(
-    dsn=os.environ.get("SENTRY_DSN"),
-    integrations=[FlaskIntegration()],
-    traces_sample_rate=1.0
-)
-
 app = Flask(__name__)
-app.config.from_pyfile("config.py")
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 
 DB_USER = os.environ.get("DB_USER")
 DB_PASSWORD = os.environ.get("DB_PASSWORD")
 DB_NAME = os.environ.get("DB_NAME")
-DB_HOST = 'postgres'
+DB_HOST = 'localhost'
 DB_PORT = '5432'
 
 DB_URI = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
