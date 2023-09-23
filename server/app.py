@@ -1,6 +1,5 @@
 import os
 import periodictable
-import openai
 from chempy import balance_stoichiometry
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, jsonify, request, json
@@ -8,7 +7,6 @@ from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
-openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 DB_USER = os.environ.get("DB_USER")
 DB_PASSWORD = os.environ.get("DB_PASSWORD")
