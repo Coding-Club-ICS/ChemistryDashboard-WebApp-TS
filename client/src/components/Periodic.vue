@@ -6,52 +6,42 @@
       </div>
 
       <div class="flex justify-between">
-        <div class="flex justify-between gap-2">
+        <div class="flex gap-2">
           <PeriodicBox v-for="element in elements.slice(3, 5)" :title="element" />
         </div>
-        <div class="flex justify-between gap-2">
+        <div class="flex gap-2">
           <PeriodicBox v-for="element in elements.slice(5, 11)" :title="element" />
         </div>
       </div>
 
-      <div class="flex justify-between gap-4">
-        <div class="flex justify-between gap-2">
+      <div class="flex justify-between">
+        <div class="flex gap-2">
           <PeriodicBox v-for="element in elements.slice(11, 13)" :title="element" />
         </div>
-        <div class="flex justify-between gap-2">
+        <div class="flex gap-2">
           <PeriodicBox v-for="element in elements.slice(13, 19)" :title="element" />
         </div>
       </div>
 
-      <div class="flex justify-between gap-2">
-        <div class="flex justify-between gap-2">
-          <PeriodicBox v-for="element in elements.slice(19, 22)" :title="element" />
-        </div>
-        <div class="flex justify-between gap-2">
-          <PeriodicBox v-for="element in elements.slice(22, 37)" :title="element" />
-        </div>
+      <div class="flex gap-2">
+        <PeriodicBox v-for="element in elements.slice(19, 37)" :title="element" />
       </div>
 
-      <div class="flex justify-between gap-2">
-        <div class="flex justify-between gap-2">
-          <PeriodicBox v-for="element in elements.slice(37, 40)" :title="element" />
-        </div>
-        <div class="flex justify-between gap-2">
-          <PeriodicBox v-for="element in elements.slice(40, 55)" :title="element" />
-        </div>
+      <div class="flex gap-2">
+        <PeriodicBox v-for="element in elements.slice(37, 55)" :title="element" />
       </div>
 
-      <div class="flex justify-between gap-2">
-        <div class="flex justify-between gap-2">
+      <div class="flex gap-2">
+        <div class="flex gap-2">
           <PeriodicBox v-for="element in elements.slice(55, 58)" :title="element" />
         </div>
-        <div class="flex justify-between gap-2">
+        <div class="flex gap-2">
           <PeriodicBox v-for="element in elements.slice(104, 119)" :title="element" />
         </div>
       </div>
 
-      <div class="flex justify-between gap-2">
-        <div class="flex justify-between gap-2">
+      <div class="flex gap-2">
+        <div class="flex gap-2">
           <PeriodicBox v-for="element in elements.slice(87, 90)" :title="element" />
         </div>
         <div class="flex justify-between gap-2">
