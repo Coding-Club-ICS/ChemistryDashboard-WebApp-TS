@@ -15,14 +15,14 @@
   const elementName = ref('')
 
   const getProperties = async () => {
-    try {
-      const { data } = await instance.get('/element/Cl');
-      elementName.value = data.name;
-    } catch (error) {
+    await instance.get('/element/Cl')
+    .then((response) => {
+      console.log(response);
+      elementName.value = response.data.name
+    })
+    .catch((error) => {
       console.log(error);
-    }
-
-
+    });
   }
 
   getProperties();

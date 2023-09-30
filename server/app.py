@@ -5,11 +5,14 @@ import pubchempy as pcp
 from mendeleev import element
 from chempy import balance_stoichiometry
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS, cross_origin
 from flask import Flask, jsonify, request, json
 from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 DB_USER = os.environ.get("DB_USER")
 DB_PASSWORD = os.environ.get("DB_PASSWORD")
@@ -38,11 +41,13 @@ with app.app_context():
     db.create_all()
 
 @app.route("/")
+@cross_origin()
 def index():
     return "Hello, World!"
 
 
 @app.route("/chem/get_elements", methods=["GET"])
+@cross_origin()
 def get_elements():
     try:
         elements = Element.query.all()
@@ -53,6 +58,7 @@ def get_elements():
 
 
 @app.route("/chem/add_element", methods=["POST"])
+@cross_origin()
 def add_element():
     try:
         name = request.json.get("name")
@@ -69,6 +75,7 @@ with app.app_context():
     db.create_all()
 
 @app.route("/chem/update_element/<int:id>", methods=["PUT"])
+@cross_origin()
 def update_element(id):
     try:
         name = request.json.get("name")
@@ -86,6 +93,7 @@ def update_element(id):
 
 
 @app.route("/chem/delete_element/<int:id>", methods=["DELETE"])
+@cross_origin()
 def delete_element(id):
     try:
         element = Element.query.get(id)
@@ -99,6 +107,7 @@ def delete_element(id):
         return jsonify({"error": f"Could not execute query: {e}"}), 500
 
 @app.route("/chem/balance/<string:equation>", methods=["GET"])
+@cross_origin()
 def balance_equation(equation):
     try:
         equation = equation.split("=")
@@ -132,6 +141,7 @@ def balance_equation(equation):
 
 
 @app.route("/chem/periodictable", methods=["GET"])
+@cross_origin()
 def get_periodic_table():
     try:
         elements = [element.symbol for element in periodictable.elements]
@@ -140,6 +150,7 @@ def get_periodic_table():
         return jsonify({"error": f"Could not execute query: {e}"}), 500
 
 @app.route("/chem/element/<string:symbol>", methods=["GET"])
+@cross_origin()
 def get_properties(symbol):
     try:
         e = element(symbol)
@@ -149,6 +160,7 @@ def get_properties(symbol):
 
 
 @app.route("/chem/compound/get_cid/<string:compound>", methods=["GET"])
+@cross_origin()
 def get_cid(compound):
     try:
         cid = requests.get(f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/{compound}/cids/JSON").json()["IdentifierList"]["CID"][0]
