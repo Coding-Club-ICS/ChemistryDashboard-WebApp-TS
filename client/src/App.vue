@@ -7,8 +7,8 @@ import Sidebar from './components/Sidebar.vue';
   <router-link to="/calculator" />
   <router-link to="/viewer" />
 
-  <div class="h-full">
-    <router-view />
+  <div class="flex h-full">
     <Sidebar />
+    <router-view />
   </div>
 </template>

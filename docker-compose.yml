@@ -1,4 +1,15 @@
 services:
+  frontend:
+    container_name: frontend
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    command: npm run dev
+
   backend:
     container_name: backend
     build:
@@ -13,7 +24,6 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
       - SECRET_KEY=${SECRET_KEY}
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
     command: flask run --host=0.0.0.0
 
   postgres:
