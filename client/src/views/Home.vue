@@ -1,18 +1,31 @@
 <template>
   <div class="w-full flex flex-col justify-between">
-    <h1 class="font-semibold text-[#D8D2C0] text-[31px] mx-auto">Home</h1>
-    <div class="flex justify-between m-auto">
-      <h1>{{ elementName }}</h1>
-    </div>
+    <h1 class="font-semibold text-secondary text-[31px] mx-auto">Home</h1>
+    <h1 class="font-medium text-secondary text-[31px] mx-auto">Hydrogen</h1>
+    <Periodic />
+  </div> 
 
-  </div>
 </template>
 
 <script setup lang="ts">
   import instance from '../api'
   import { ref } from 'vue';
+  import Periodic from '../components/Periodic.vue'
 
+  const elements = ref([])
   const elementName = ref('')
+
+  const getElements = async () => {
+    await instance.get('/periodictable')
+    .then((response) => {
+      console.log(response);
+      elements.value = response.data["elements"]
+      console.log(elements.value[8])
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
 
   const getProperties = async () => {
     await instance.get('/element/Cl')
@@ -25,5 +38,6 @@
     });
   }
 
+  getElements();
   getProperties();
 </script>
