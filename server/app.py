@@ -4,7 +4,6 @@ import periodictable
 import pubchempy as pcp
 from mendeleev import element
 from chempy import balance_stoichiometry
-from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask import Flask, jsonify, request, json
 from werkzeug.exceptions import HTTPException

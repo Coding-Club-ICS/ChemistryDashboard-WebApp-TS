@@ -1,11 +1,9 @@
 chempy==0.8.3
 Flask==2.3.2
-flask_sqlalchemy==3.1.1
 periodictable==1.6.1
 Werkzeug==2.3.6
-psycopg2-binary==2.9.7
-openai==0.28.0
 mendeleev==0.14.0
 pubchempy==1.0.4
 Flask-Cors==4.0.0
 python-dotenv==1.0.0
+gunicorn==21.2.0
