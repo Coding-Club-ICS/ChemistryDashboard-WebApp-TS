@@ -14,86 +14,14 @@ app = Flask(__name__)
 cors = CORS(app)
 
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URI")
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-db = SQLAlchemy(app)
 
 valid_elements = [element.symbol for element in periodictable.elements]
 
 
-class Element(db.Model):
-    __tablename__ = "elements"
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255))
-
-    def __init__(self, name):
-        self.name = name
 
 
-with app.app_context():
-    db.create_all()
-
-@app.route("/")
-def index():
-    return "Hello, World!"
-
-
-@app.route("/chem/get_elements", methods=["GET"])
-def get_elements():
-    try:
-        elements = Element.query.all()
-        element_list = [{"id": element.id, "name": element.name} for element in elements]
-        return jsonify({"elements": element_list})
-    except Exception as e:
-        return jsonify({"error": f"Could not execute query: {e}"}), 500
-
-
-@app.route("/chem/add_element", methods=["POST"])
-def add_element():
-    try:
-        name = request.json.get("name")
-        if name not in valid_elements:
-            return jsonify({"error": "Invalid element"}), 400
-        element = Element(name=name)
-        db.session.add(element)
-        db.session.commit()
-        return jsonify({"message": "Element added successfully"})
-    except Exception as e:
-        return jsonify({"error": f"Could not execute query: {e}"}), 500
-
-with app.app_context():
-    db.create_all()
-
-@app.route("/chem/update_element/<int:id>", methods=["PUT"])
-def update_element(id):
-    try:
-        name = request.json.get("name")
-        element = Element.query.get(id)
-        if element:
-            element.name = name
-            if name not in valid_elements:
-                return jsonify({"error": "Invalid element"}), 400
-            db.session.commit()
-            return jsonify({"message": "Element updated successfully"})
-        else:
-            return jsonify({"error": "Element not found"}), 404
-    except Exception as e:
-        return jsonify({"error": f"Could not execute query: {e}"}), 500
-
-
-@app.route("/chem/delete_element/<int:id>", methods=["DELETE"])
-def delete_element(id):
-    try:
-        element = Element.query.get(id)
-        if element:
-            db.session.delete(element)
-            db.session.commit()
-            return jsonify({"message": "Element deleted successfully"})
-        else:
-            return jsonify({"error": "Element not found"}), 404
-    except Exception as e:
-        return jsonify({"error": f"Could not execute query: {e}"}), 500
 
 @app.route("/chem/balance/<string:equation>", methods=["GET"])
 def balance_equation(equation):
