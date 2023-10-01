@@ -8,3 +8,4 @@ openai==0.28.0
 mendeleev==0.14.0
 pubchempy==1.0.4
 Flask-Cors==4.0.0
+python-dotenv==1.0.0

@@ -10,18 +10,12 @@ from flask import Flask, jsonify, request, json
 from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
+
 cors = CORS(app)
+
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URI")
 app.config['CORS_HEADERS'] = 'Content-Type'
-
-DB_USER = os.environ.get("DB_USER")
-DB_PASSWORD = os.environ.get("DB_PASSWORD")
-DB_NAME = os.environ.get("DB_NAME")
-DB_HOST = 'postgres'
-DB_PORT = '5432'
-
-DB_URI = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
 
 db = SQLAlchemy(app)
 
@@ -176,4 +170,4 @@ def handle_exception(e):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run()
