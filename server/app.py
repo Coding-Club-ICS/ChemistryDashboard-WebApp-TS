@@ -105,7 +105,6 @@ def delete_element(id):
 def balance_equation(equation):
     try:
         equation = equation.split("=")
-        equation = equation.replace(" ", "")
         reactants = set(equation[0].split("+"))
         products = set(equation[1].split("+"))
         reac, prod = balance_stoichiometry(reactants, products)

@@ -12,6 +12,10 @@ body {
   padding: 27px 35px 27px 35px;
 }
 
+input:focus {
+  outline: none;
+}
+
 #app {
   height: 100%;
 }
