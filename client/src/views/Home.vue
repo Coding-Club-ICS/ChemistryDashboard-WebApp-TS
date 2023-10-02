@@ -25,6 +25,7 @@
   import Periodic from '../components/Periodic.vue'
   import { storeToRefs } from 'pinia';
   import { useElementStore } from '../stores/ElementStore';
+  import * as Element_Data from '../data/data.json'
 
   const elements = ref([])
   const elementName = ref('')
@@ -33,30 +34,10 @@
   const store = useElementStore();
   const { symbol } = storeToRefs(store);
 
-  const getElements = async () => {
-    await instance.get('/periodictable')
-    .then((response) => {
-      console.log(response);
-      elements.value = response.data["elements"]
-      console.log(elements.value[8])
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  }
-
   watch(symbol, async () => {
-    await instance.get(`/element/${store.symbol}`)
-    .then((response) => {
-      console.log(response);
-      elementName.value = response.data.name
-      elementMass.value = response.data.atomic_weight
-      elementRadius.value = response.data.atomic_radius
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+    elementName.value = Element_Data[store.symbol].name
+    elementMass.value = Element_Data[store.symbol].atomic_weight
+    elementRadius.value = Element_Data[store.symbol].atomic_radius
   })
 
-  getElements();
 </script>
