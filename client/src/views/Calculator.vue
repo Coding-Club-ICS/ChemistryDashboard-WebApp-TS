@@ -28,6 +28,7 @@
     })
     .catch((error) => {
       console.log(error);
+      balancedEquation.value = "Invalid equation."
     });
   }
   

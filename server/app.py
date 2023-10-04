@@ -79,10 +79,6 @@ def get_cid(compound):
     except Exception as e:
         return jsonify({"error": f"Could not execute query: {e}"}), 500
 
-    except Exception as e:
-        return jsonify({"error": f"Could not execute query: {e}"}), 500
-    
-
 
 @app.errorhandler(HTTPException)
 def handle_exception(e):
