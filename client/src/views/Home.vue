@@ -9,8 +9,8 @@
           <p class="text-secondary text-[13px] text-center">{{ elementMass || '' }}</p>
         </div>
         <div class="flex flex-col gap-2 mx-auto">
-          <h1 class="text-secondary text-[16px]">Atmoic Radius</h1>
-          <p class="text-secondary text-[13px] text-center">{{ elementRadius || '' }}</p>
+          <h1 class="text-secondary text-[16px]">Atmoic Number</h1>
+          <p class="text-secondary text-[13px] text-center">{{ elementNumber || '' }}</p>
         </div>
       </div>
     </div>
@@ -28,17 +28,17 @@
 
   let elementName = ref('')
   let elementMass = ref('') 
-  let elementRadius = ref('')
+  let elementNumber = ref('')
   const store = useElementStore();
   const { symbol } = storeToRefs(store);
 
   watch(symbol, async () => {
     elementName.value = Element_Data[store.symbol as keyof typeof Element_Data].name
     elementMass.value = Element_Data[store.symbol as keyof typeof Element_Data].atomic_weight.toString()
-    elementRadius.value = Element_Data[store.symbol as keyof typeof Element_Data].atomic_radius.toString()
+    elementNumber.value = Element_Data[store.symbol as keyof typeof Element_Data].atomic_number.toString()
     console.log(elementName)
     console.log(elementMass)
-    console.log(elementRadius)
+    console.log(elementNumber)
   })
 
 </script>
