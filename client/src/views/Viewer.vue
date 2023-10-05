@@ -15,16 +15,16 @@
 
 <script setup lang="ts">
   import { ref } from 'vue';
-  import instance from '../api';
+  import axios from 'axios';
 
   const name = ref('')
   const error_message = ref('')
   let cid = ''
 
   const getCid = () => {
-    instance.get(`/compound/get_cid/${name.value}`)
+    axios.get(`https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/${name.value}/cids/JSON`)
     .then((response) => {
-      cid = response.data.cid
+      cid = response.data.IdentifierList.CID[0]
       window.open(`https://embed.molview.org/v1/?mode=balls&cid=${cid}`, '_blank')
     })
     .catch((error) => {
