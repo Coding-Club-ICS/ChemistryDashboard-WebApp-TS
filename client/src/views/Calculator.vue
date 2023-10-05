@@ -21,7 +21,7 @@
   const balancedEquation = ref('');
 
   const balanceEquation = async () => {
-    instance.get(`/chem/balance/${userEquation.value}`)
+    instance.get(`/balance/${userEquation.value}`)
       .then((res) => {
         balancedEquation.value = res.data;
       })
