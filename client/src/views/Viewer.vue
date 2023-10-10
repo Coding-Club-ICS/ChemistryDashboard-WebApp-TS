@@ -4,8 +4,8 @@
     <div class="h-full bg-secondary rounded-[15px] px-[100px] py-[64px]">
       <div class="flex flex-col gap-[60px] mx-auto">
         <div class="flex gap-[30px]">
-          <input v-model="name" @keyup.enter="getCid" class="flex-1 rounded-full h-[64px] w-full pl-5 placeholder:text-secondary text-secondary caret-secondary bg-primary" type="text" placeholder="Enter the compound..." />
-          <button @click="getCid" class="flex justify-center items-center bg-primary w-[64px] h-[64px] rounded-full"><img class="h-[24px] w-auto" src="../assets/search.svg" alt="search"></button>
+          <input v-model="name" @keyup.enter="getCid" class="flex-1 rounded-full h-[64px] min-w-[225px] w-full pl-5 placeholder:text-secondary text-secondary caret-secondary bg-primary" type="text" placeholder="Enter the compound..." />
+          <button @click="getCid" class="flex justify-center items-center bg-primary min-w-[64px] w-[64px] h-[64px] rounded-full"><img class="h-[24px] w-auto" src="../assets/search.svg" alt="search"></button>
         </div>
         <h1 class="text-primary text-center font-bold text-[39px]">{{ error_message }}</h1>
       </div>
