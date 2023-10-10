@@ -14,22 +14,20 @@
 </template>
 
 <script setup lang="ts">
-  import instance from '../api';
   import { ref } from 'vue';
+  import { instance } from '../api';
 
   const userEquation = ref('');
   const balancedEquation = ref('');
 
   const balanceEquation = async () => {
-    await instance.get(`/balance/${userEquation.value.replace(/\s/g, '')}`)
-    .then((response) => {
-      console.log(response);
-      balancedEquation.value = response.data.result
-    })
-    .catch((error) => {
-      console.log(error);
-      balancedEquation.value = "Invalid equation."
-    });
+    instance.get(`/balance/${userEquation.value}`)
+      .then((res) => {
+        balancedEquation.value = res.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
   
 
