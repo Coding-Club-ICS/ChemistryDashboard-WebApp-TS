@@ -45,7 +45,7 @@ def balance_equation(equation):
         for key in prod_key:
             if prod[key] == 1:
                 prod[key] = ""
-            result += " = " + str(prod[key]) + key
+            result += f" = {str(prod[key])}{key}"
             if key != prod_key[-1]:
                 result += " + "
 

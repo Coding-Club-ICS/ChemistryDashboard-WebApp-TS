@@ -9,6 +9,7 @@
         <router-link to="/"><img src="../assets/house.svg" alt="home" class="h-[32px] mx-auto"></router-link>
         <router-link to="/calculator"><img src="../assets/calculator.svg" alt="home" class="h-[32px] mx-auto"></router-link>
         <router-link to="viewer"><img src="../assets/cube.svg" alt="home" class="h-[32px] mx-auto"></router-link>
+        <router-link to="/thank-you"><img src="../assets/heart.svg" alt="home" class="h-[32px] mx-auto"></router-link>
       </div>
     </div>
 
